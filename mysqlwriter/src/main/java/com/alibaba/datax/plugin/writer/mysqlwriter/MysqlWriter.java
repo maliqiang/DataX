@@ -12,7 +12,7 @@ import java.util.List;
 
 //TODO writeProxy
 public class MysqlWriter extends Writer {
-    private static final DataBaseType DATABASE_TYPE = DataBaseType.MySql;
+    private static final DataBaseType DATABASE_TYPE = DataBaseType.MYSQL8;
 
     public static class Job extends Writer.Job {
         private Configuration originalConfig = null;

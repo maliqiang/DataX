@@ -35,6 +35,16 @@ public final class DBUtil {
     private DBUtil() {
     }
 
+    /**
+     * 选择数据库URL
+     * @param dataBaseType
+     * @param jdbcUrls
+     * @param username
+     * @param password
+     * @param preSql
+     * @param checkSlave
+     * @return
+     */
     public static String chooseJdbcUrl(final DataBaseType dataBaseType,
                                        final List<String> jdbcUrls, final String username,
                                        final String password, final List<String> preSql,
@@ -81,6 +91,17 @@ public final class DBUtil {
         }
     }
 
+    /**
+     * 非重试方式选择数据库连接url
+     * @param dataBaseType
+     * @param jdbcUrls
+     * @param username
+     * @param password
+     * @param preSql
+     * @param checkSlave
+     * @return
+     * @throws DataXException
+     */
     public static String chooseJdbcUrlWithoutRetry(final DataBaseType dataBaseType,
                                        final List<String> jdbcUrls, final String username,
                                        final String password, final List<String> preSql,
@@ -358,7 +379,7 @@ public final class DBUtil {
                                                    String url, String user, String pass, String socketTimeout) {
 
         //ob10的处理
-        if (url.startsWith(com.alibaba.datax.plugin.rdbms.writer.Constant.OB10_SPLIT_STRING) && dataBaseType == DataBaseType.MySql) {
+        if (url.startsWith(com.alibaba.datax.plugin.rdbms.writer.Constant.OB10_SPLIT_STRING) && dataBaseType == DataBaseType.MYSQL8) {
             String[] ss = url.split(com.alibaba.datax.plugin.rdbms.writer.Constant.OB10_SPLIT_STRING_PATTERN);
             if (ss.length != 3) {
                 throw DataXException
@@ -384,6 +405,13 @@ public final class DBUtil {
         return connect(dataBaseType, url, prop);
     }
 
+    /**
+     * 连接数据库
+     * @param dataBaseType
+     * @param url
+     * @param prop
+     * @return
+     */
     private static synchronized Connection connect(DataBaseType dataBaseType,
                                                    String url, Properties prop) {
         try {
@@ -587,8 +615,8 @@ public final class DBUtil {
         try {
             connection = connect(dataBaseType, url, user, pass);
             if (connection != null) {
-                if (dataBaseType.equals(dataBaseType.MySql) && checkSlave) {
-                    //dataBaseType.MySql
+                if (dataBaseType.equals(dataBaseType.MYSQL8) && checkSlave) {
+                    //dataBaseType.MYSQL8
                     boolean connOk = !isSlaveBehind(connection);
                     return connOk;
                 } else {
@@ -604,6 +632,15 @@ public final class DBUtil {
         return false;
     }
 
+    /**
+     * 测试连接是否成功
+     * @param dataBaseType
+     * @param url
+     * @param user
+     * @param pass
+     * @param preSql
+     * @return
+     */
     public static boolean testConnWithoutRetry(DataBaseType dataBaseType,
                                                String url, String user, String pass, List<String> preSql) {
         Connection connection = null;
@@ -663,6 +700,12 @@ public final class DBUtil {
         return query(stmt, sql);
     }
 
+    /**
+     * 前置检查
+     * @param conn
+     * @param pre
+     * @return
+     */
     private static boolean doPreCheck(Connection conn, String pre) {
         ResultSet rs = null;
         try {
@@ -712,7 +755,7 @@ public final class DBUtil {
                 sessionConfig.add("set transaction policy 4");
                 DBUtil.doDealWithSessionConfig(conn, sessionConfig, message);
                 break;
-            case MySql:
+            case MYSQL8:
                 sessionConfig = config.getList(Key.SESSION,
                         new ArrayList<String>(), String.class);
                 DBUtil.doDealWithSessionConfig(conn, sessionConfig, message);
@@ -779,7 +822,12 @@ public final class DBUtil {
                     DBUtilErrorCode.RS_ASYNC_ERROR, "异步获取ResultSet失败", e);
         }
     }
-    
+
+    /**
+     * 加载数据库驱动
+     * @param pluginType
+     * @param pluginName
+     */
     public static void loadDriverClass(String pluginType, String pluginName) {
         try {
             String pluginJsonPath = StringUtils.join(

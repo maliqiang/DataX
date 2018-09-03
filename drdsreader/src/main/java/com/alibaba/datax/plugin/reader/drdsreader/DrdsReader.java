@@ -17,7 +17,7 @@ import java.util.List;
 
 public class DrdsReader extends Reader {
 
-	private static final DataBaseType DATABASE_TYPE = DataBaseType.MySql;
+	private static final DataBaseType DATABASE_TYPE = DataBaseType.MYSQL8;
 	private static final Logger LOG = LoggerFactory.getLogger(DrdsReader.class);
 
 	public static class Job extends Reader.Job {

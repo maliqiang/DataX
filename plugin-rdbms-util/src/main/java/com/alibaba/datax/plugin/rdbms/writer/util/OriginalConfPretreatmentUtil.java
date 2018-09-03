@@ -140,6 +140,11 @@ public final class OriginalConfPretreatmentUtil {
         dealColumnConf(originalConfig, jdbcConnectionFactory, oneTable);
     }
 
+    /**
+     * 处理写入方式
+     * @param originalConfig
+     * @param dataBaseType
+     */
     public static void dealWriteMode(Configuration originalConfig, DataBaseType dataBaseType) {
         List<String> columns = originalConfig.getList(Key.COLUMN, String.class);
 
@@ -156,7 +161,7 @@ public final class OriginalConfPretreatmentUtil {
 
         boolean forceUseUpdate = false;
         //ob10的处理
-        if (dataBaseType == DataBaseType.MySql && isOB10(jdbcUrl)) {
+        if (dataBaseType == DataBaseType.MYSQL8 && isOB10(jdbcUrl)) {
             forceUseUpdate = true;
         }
 

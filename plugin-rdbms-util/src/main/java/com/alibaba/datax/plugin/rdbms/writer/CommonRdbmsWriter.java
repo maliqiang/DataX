@@ -209,7 +209,7 @@ public class CommonRdbmsWriter {
             this.jdbcUrl = writerSliceConfig.getString(Key.JDBC_URL);
 
             //ob10的处理
-            if (this.jdbcUrl.startsWith(Constant.OB10_SPLIT_STRING) && this.dataBaseType == DataBaseType.MySql) {
+            if (this.jdbcUrl.startsWith(Constant.OB10_SPLIT_STRING) && this.dataBaseType == DataBaseType.MYSQL8) {
                 String[] ss = this.jdbcUrl.split(Constant.OB10_SPLIT_STRING_PATTERN);
                 if (ss.length != 3) {
                     throw DataXException
@@ -520,7 +520,7 @@ public class CommonRdbmsWriter {
                 // warn: bit(1) -> Types.BIT 可使用setBoolean
                 // warn: bit(>1) -> Types.VARBINARY 可使用setBytes
                 case Types.BIT:
-                    if (this.dataBaseType == DataBaseType.MySql) {
+                    if (this.dataBaseType == DataBaseType.MYSQL8) {
                         preparedStatement.setBoolean(columnIndex + 1, column.asBoolean());
                     } else {
                         preparedStatement.setString(columnIndex + 1, column.asString());
@@ -552,7 +552,7 @@ public class CommonRdbmsWriter {
 
                 boolean forceUseUpdate = false;
                 //ob10的处理
-                if (dataBaseType != null && dataBaseType == DataBaseType.MySql && OriginalConfPretreatmentUtil.isOB10(jdbcUrl)) {
+                if (dataBaseType != null && dataBaseType == DataBaseType.MYSQL8 && OriginalConfPretreatmentUtil.isOB10(jdbcUrl)) {
                     forceUseUpdate = true;
                 }
 

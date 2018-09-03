@@ -10,9 +10,11 @@ import java.util.regex.Pattern;
  * <p/>
  */
 public enum DataBaseType {
-    MySql("mysql", "com.mysql.cj.jdbc.Driver"),
+    MYSQL8("mysql", "com.mysql.cj.jdbc.Driver"),
+    MYSQL("drds", "com.mysql.jdbc.Driver"),
     Tddl("mysql", "com.mysql.cj.jdbc.Driver"),
     DRDS("drds", "com.mysql.jdbc.Driver"),
+    FIREBIRD("firebird", "org.firebirdsql.jdbc.FBDriver"),
     Oracle("oracle", "oracle.jdbc.OracleDriver"),
     SQLServer("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver"),
     PostgreSQL("postgresql", "org.postgresql.Driver"),
@@ -37,7 +39,15 @@ public enum DataBaseType {
         String result = jdbc;
         String suffix = null;
         switch (this) {
-            case MySql:
+            case MYSQL:
+                suffix = "yearIsDateType=false&useSSL=false&zeroDateTimeBehavior=convertToNull&tinyInt1isBit=false&rewriteBatchedStatements=true";
+                if (jdbc.contains("?")) {
+                    result = jdbc + "&" + suffix;
+                } else {
+                    result = jdbc + "?" + suffix;
+                }
+                break;
+            case MYSQL8:
             case DRDS:
                 suffix = "yearIsDateType=false&useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL&tinyInt1isBit=false&rewriteBatchedStatements=true";
                 if (jdbc.contains("?")) {
@@ -56,6 +66,8 @@ public enum DataBaseType {
             	break;
             case RDBMS:
                 break;
+            case FIREBIRD:
+                break;
             default:
                 throw DataXException.asDataXException(DBUtilErrorCode.UNSUPPORTED_TYPE, "unsupported database type.");
         }
@@ -67,7 +79,7 @@ public enum DataBaseType {
         String result = jdbc;
         String suffix = null;
         switch (this) {
-            case MySql:
+            case MYSQL8:
                 suffix = "yearIsDateType=false&useSSL=false&zeroDateTimeBehavior=CONVERT_TO_NULL&rewriteBatchedStatements=true&tinyInt1isBit=false";
                 if (jdbc.contains("?")) {
                     result = jdbc + "&" + suffix;
@@ -93,6 +105,8 @@ public enum DataBaseType {
             	break;
             case RDBMS:
                 break;
+            case FIREBIRD:
+                break;
             default:
                 throw DataXException.asDataXException(DBUtilErrorCode.UNSUPPORTED_TYPE, "unsupported database type.");
         }
@@ -104,7 +118,7 @@ public enum DataBaseType {
         String result = splitPk;
 
         switch (this) {
-            case MySql:
+            case MYSQL8:
             case Oracle:
                 if (splitPk.length() >= 2 && splitPk.startsWith("`") && splitPk.endsWith("`")) {
                     result = splitPk.substring(1, splitPk.length() - 1).toLowerCase();
@@ -130,7 +144,7 @@ public enum DataBaseType {
         String result = columnName;
 
         switch (this) {
-            case MySql:
+            case MYSQL8:
                 result = "`" + columnName.replace("`", "``") + "`";
                 break;
             case Oracle:
@@ -152,7 +166,7 @@ public enum DataBaseType {
         String result = tableName;
 
         switch (this) {
-            case MySql:
+            case MYSQL8:
                 result = "`" + tableName.replace("`", "``") + "`";
                 break;
             case Oracle:
@@ -172,7 +186,7 @@ public enum DataBaseType {
 
     private static Pattern mysqlPattern = Pattern.compile("jdbc:mysql://(.+):\\d+/.+");
     private static Pattern oraclePattern = Pattern.compile("jdbc:oracle:thin:@(.+):\\d+:.+");
-
+    private static Pattern firebirdPattern = Pattern.compile("jdbc:firebirdsql:localhost//(.+):\\\\d+/.+\\$.gdb");
     /**
      * 注意：目前只实现了从 mysql/oracle 中识别出ip 信息.未识别到则返回 null.
      */

@@ -47,7 +47,7 @@ public class PreCheckTask implements Callable<Boolean>{
         Connection conn = DBUtil.getConnectionWithoutRetry(this.dataBaseType, jdbcUrl,
                 this.userName, password);
         int fetchSize = 1;
-        if(DataBaseType.MySql.equals(dataBaseType) || DataBaseType.DRDS.equals(dataBaseType)) {
+        if(DataBaseType.MYSQL8.equals(dataBaseType) || DataBaseType.DRDS.equals(dataBaseType)) {
             fetchSize = Integer.MIN_VALUE;
         }
         try{

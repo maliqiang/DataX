@@ -150,7 +150,7 @@ public class CommonRdbmsReader {
             this.jdbcUrl = readerSliceConfig.getString(Key.JDBC_URL);
 
             //ob10的处理
-            if (this.jdbcUrl.startsWith(com.alibaba.datax.plugin.rdbms.writer.Constant.OB10_SPLIT_STRING) && this.dataBaseType == DataBaseType.MySql) {
+            if (this.jdbcUrl.startsWith(com.alibaba.datax.plugin.rdbms.writer.Constant.OB10_SPLIT_STRING) && this.dataBaseType == DataBaseType.MYSQL8) {
                 String[] ss = this.jdbcUrl.split(com.alibaba.datax.plugin.rdbms.writer.Constant.OB10_SPLIT_STRING_PATTERN);
                 if (ss.length != 3) {
                     throw DataXException

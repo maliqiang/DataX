@@ -1,4 +1,4 @@
-package com.alibaba.datax.plugin.reader.mysqlreader;
+package com.alibaba.datax.plugin.reader.firebirdreader;
 
 import com.alibaba.datax.common.plugin.RecordSender;
 import com.alibaba.datax.common.spi.Reader;
@@ -28,7 +28,7 @@ public class MysqlReader extends Reader {
 
             Integer userConfigedFetchSize = this.originalConfig.getInt(Constant.FETCH_SIZE);
             if (userConfigedFetchSize != null) {
-                LOG.warn("对 mysqlreader 不需要配置 fetchSize, mysqlreader 将会忽略这项配置. 如果您不想再看到此警告,请去除fetchSize 配置.");
+                LOG.warn("对 firebirdreader 不需要配置 fetchSize, firebirdreader 将会忽略这项配置. 如果您不想再看到此警告,请去除fetchSize 配置.");
             }
 
             this.originalConfig.set(Constant.FETCH_SIZE, Integer.MIN_VALUE);

@@ -169,6 +169,13 @@ public class CommonRdbmsReader {
 
         }
 
+        /**
+         * 读取数据
+         * @param readerSliceConfig
+         * @param recordSender
+         * @param taskPluginCollector
+         * @param fetchSize
+         */
         public void startRead(Configuration readerSliceConfig,
                               RecordSender recordSender,
                               TaskPluginCollector taskPluginCollector, int fetchSize) {

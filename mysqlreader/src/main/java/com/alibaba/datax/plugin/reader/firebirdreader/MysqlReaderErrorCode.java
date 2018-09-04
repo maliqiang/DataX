@@ -1,4 +1,4 @@
-package com.alibaba.datax.plugin.reader.mysqlreader;
+package com.alibaba.datax.plugin.reader.firebirdreader;
 
 import com.alibaba.datax.common.spi.ErrorCode;
 
